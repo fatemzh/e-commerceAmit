@@ -2,9 +2,13 @@ import React from "react";
 import loginSignUpImage from "../assest/login-animation.gif";
 import { BiHide, BiShow } from "react-icons/bi";
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { Link } from "react-router-dom";
+import { BsEmojiSmileUpsideDown } from "react-icons/bs";
+import { ImageToBase64 } from "../utility/imageToBase64";
 
 function SignUp() {
+  const navigate = useNavigate();
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [data, setData] = useState({
@@ -13,6 +17,7 @@ function SignUp() {
     email: "",
     password: "",
     confirmPassword: "",
+    image  : "",
   });
   console.log(data);
   const handleShowPassword = () => {
@@ -23,37 +28,61 @@ function SignUp() {
   };
 
   const handleOnChange = (e) => {
-    const {name, value} = e.target
-    setData((preve) =>{
+    const { name, value } = e.target;
+    setData((preve) => {
       return {
-          ...preve,
-          [name] : value
+        ...preve,
+        [name]: value,
+      };
+    });
+  };
+
+  const handleUploadProfileImage = async (e) => {
+    const data = await ImageToBase64(e.target.files[0]);
+    console.log(data);
+
+    setData((preve) =>{
+      return{
+        ...preve,
+        image :  data
       }
     })
-  }
+  };
 
   const handleSubmit = (e) => {
-    e.preventDefault()
-    const {firstName, lastName, email, password, confirmPassword} = data
-    if(firstName && lastName && email && password && confirmPassword){
-      if(password === confirmPassword){
-        alert("successful")
+    e.preventDefault();
+    const { firstName, lastName, email, password, confirmPassword } = data;
+    if (firstName && lastName && email && password && confirmPassword) {
+      if (password === confirmPassword) {
+        alert("successful");
+        navigate("/login");
+      } else {
+        alert("password and confirm password are not equal.");
       }
-      else{
-        alert("password and confirm password are not equal.")
-      }
+    } else {
+      alert("Please enter required fields");
     }
-    else{
-      alert("Please enter required fields")
-    }
-  } 
+  };
 
   return (
     <div className="p-3 md:p-4">
       <div className="w-full max-w-sm bg-white m-auto flex flex-col p-2">
         {/* <h1 className='text-center text-2xl font-bold'>Sign up</h1> */}
         <div className="w-20 overflow-hidden rounded-full drop-shadow-md shadow-md m-auto">
-          <img src={loginSignUpImage} className="w-full" />
+          <img src={data.image ? data.image : loginSignUpImage} className="w-full" />
+
+          <label htmlFor="profileImage">
+            <div className="absolute bottom-o h-1/3 bg-slate-500 w-full text-center cursor-pointer">
+              <p className="text-sm p-1 text-white">Upload</p>
+            </div>
+            <input
+              type={"file"}
+              id="profileImage"
+              accept="image/*"
+              className="hidden"
+              onChange={handleUploadProfileImage}
+            />
+          </label>
         </div>
 
         <form className="w-full py-3 flex flex-col" onSubmit={handleSubmit}>
@@ -63,18 +92,19 @@ function SignUp() {
             id="firstName"
             name="firstName"
             className="mt-1 mb-2 w-full bg-slate-200 px-2 py-1 rounded focus-within:outline-blue-300"
-            value={data.firstName} 
-            onChange = {handleOnChange}
+            value={data.firstName}
+            onChange={handleOnChange}
           />
 
           <label htmlFor="lastName">Last Name</label>
           <input
             type="text"
-            id="lastName"s
+            id="lastName"
+            s
             name="lastName"
             className="mt-1 mb-2 w-full bg-slate-200 px-2 py-1 rounded focus-within:outline-blue-300"
-            value={data.lastName}  
-            onChange = {handleOnChange}
+            value={data.lastName}
+            onChange={handleOnChange}
           />
 
           <label htmlFor="email">Email</label>
@@ -83,8 +113,8 @@ function SignUp() {
             id="email"
             name="email"
             className="mt-1 mb-2 w-full bg-slate-200 px-2 py-1 rounded focus-within:outline-blue-300"
-            value={data.email} 
-            onChange = {handleOnChange}
+            value={data.email}
+            onChange={handleOnChange}
           />
 
           <label htmlFor="password">Password</label>
@@ -94,8 +124,8 @@ function SignUp() {
               id="password"
               name="password"
               className="w-full bg-slate-200 border-none outline-none"
-              value={data.password} 
-              onChange = {handleOnChange}
+              value={data.password}
+              onChange={handleOnChange}
             />
             <span
               className="flex text-xl cursor-pointer"
@@ -112,8 +142,8 @@ function SignUp() {
               id="confirmpassword"
               name="confirmPassword"
               className="w-full bg-slate-200 border-none outline-none"
-              value={data.confirmPassword}   
-              onChange = {handleOnChange} 
+              value={data.confirmPassword}
+              onChange={handleOnChange}
             />
             <span
               className="flex text-xl cursor-pointer"
@@ -130,7 +160,7 @@ function SignUp() {
 
         <p className="text-left text-sm mt-2">
           Already have an account ?{" "}
-          <Link to={"login"} className="text-red-500 underline">
+          <Link to={"/login"} className="text-red-500 underline">
             Login
           </Link>
         </p>
