@@ -1,0 +1,10 @@
+// create backend folder >> terminal saisie npm init, tout accepter
+// installation node serveur ; ajout dans le fichier package.json de     
+//"test": "echo \"Error: no test specified\" && exit 1",
+//  "dev" : "nodemon index.js",
+//  "start" : "node index.js" 
+    
+// npm i express cors mongoose , npm i nodemon, npm run dev
+
+
+//Mongo DB username  fatem mdp fatem123
