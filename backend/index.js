@@ -1,7 +1,7 @@
 const express = require('express')
 const cors = require('cors')
 const mongoose = require('mongoose')
-
+const dotenv = require('dotenv').config()
 const app = express()
 app.use(cors())
 app.use(express.json({limit: "10mb"}))
@@ -9,8 +9,25 @@ app.use(express.json({limit: "10mb"}))
 const PORT = process.env.PORT || 8080
 
 //mongodb connection
-console.log(process.env.MONGO_DB_URL)
-mongoose.connect()
+console.log(process.env.MONGODB_URL)
+mongoose.set('strictQuery', false);
+mongoose.connect(process.env.MONGODB_URL)
+
+//schema
+const userSchema = mongoose.Schema({
+    firstName: String,
+    lastName: String,
+    email: {
+        type : String,
+        unique : true,
+    },
+    password: String,
+    confirmPassword: String,
+    image  : String,
+})
+
+// 
+const userModel = mongoose.model("user", userSchema);
 
 //api
 app.get('/', (req, res) =>{
