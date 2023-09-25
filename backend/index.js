@@ -34,8 +34,42 @@ app.get('/', (req, res) =>{
     res.send("Server is running")
 })
 
-app.post("/signup",(req,res) => {
-    console.log(req.body)
-})
+// app.post("/signup", async(req,res) => {
+//     console.log(req.body)
+//     const {email} = req.body
+
+//     userModel.findOne({email: email}, (err, result) =>{
+//         console.log(result)
+//         console.log(err)
+//         if(result){
+//             res.send({message: "Email id is already registered"})
+//         }
+//         else{
+//             const data = userModel(req.body)
+//             const save = data.save()
+//             res.send({message : "Successfully signed up"})
+//         }
+//     })
+// })
+
+app.post("/signup", async (req, res) => {
+    console.log(req.body);
+    const { email } = req.body;
+
+    try {
+        const existingUser = await userModel.findOne({ email: email });
+
+        if (existingUser) {
+            return res.send({ message: "Email id is already registered" });
+        }
+
+        const data = new userModel(req.body);
+        await data.save();
+        res.send({ message: "Successfully signed up" });
+    } catch (err) {
+        console.error(err);
+        res.status(500).send({ message: "Internal Server Error" });
+    }
+});
 
 app.listen(PORT, () => console.log("server is running at port : " + PORT))

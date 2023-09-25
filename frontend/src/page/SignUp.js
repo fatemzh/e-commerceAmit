@@ -67,7 +67,7 @@ console.log(process.env.REACT_APP_SERVER_DOMAIN)
         const dataRes = await fetchData.json()
         console.log(dataRes)
 
-        alert("successful");
+        alert(dataRes.message);
         navigate("/login");
       } else {
         alert("password and confirm password are not equal.");
