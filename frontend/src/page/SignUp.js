@@ -6,6 +6,7 @@ import { useNavigate } from "react-router-dom";
 import { Link } from "react-router-dom";
 import { BsEmojiSmileUpsideDown } from "react-icons/bs";
 import { ImageToBase64 } from "../utility/imageToBase64";
+import { toast} from 'react-hot-toast'
 
 function SignUp() {
   const navigate = useNavigate();
@@ -67,8 +68,12 @@ console.log(process.env.REACT_APP_SERVER_DOMAIN)
         const dataRes = await fetchData.json()
         console.log(dataRes)
 
-        alert(dataRes.message);
-        navigate("/login");
+        //alert(dataRes.message);
+        toast(dataRes.message)
+        if(dataRes.alert)
+        {
+          navigate("/login");
+        }
       } else {
         alert("password and confirm password are not equal.");
       }

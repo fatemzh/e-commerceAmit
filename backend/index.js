@@ -60,12 +60,12 @@ app.post("/signup", async (req, res) => {
         const existingUser = await userModel.findOne({ email: email });
 
         if (existingUser) {
-            return res.send({ message: "Email id is already registered" });
+            return res.send({ message: "Email id is already registered", alert : false});
         }
 
         const data = new userModel(req.body);
         await data.save();
-        res.send({ message: "Successfully signed up" });
+        res.send({ message: "Successfully signed up, alert : true" });
     } catch (err) {
         console.error(err);
         res.status(500).send({ message: "Internal Server Error" });
