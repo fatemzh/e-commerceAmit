@@ -8,6 +8,11 @@ app.use(express.json({limit: "10mb"}))
  
 const PORT = process.env.PORT || 8080
 
+//mongodb connection
+console.log(process.env.MONGO_DB_URL)
+mongoose.connect()
+
+//api
 app.get('/', (req, res) =>{
     res.send("Server is running")
 })
